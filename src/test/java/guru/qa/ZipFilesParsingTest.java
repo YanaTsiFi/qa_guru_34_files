@@ -19,26 +19,52 @@ public class ZipFilesParsingTest {
     private final ClassLoader cl = ZipFilesParsingTest.class.getClassLoader();
 
     @Test
-    void parseZipArchiveTest() throws Exception {
+    void parsePdfFromZipTest() throws Exception {
         try (InputStream is = cl.getResourceAsStream("test_files.zip")) {
             assert is != null;
             try (ZipInputStream zis = new ZipInputStream(is)) {
 
                 ZipEntry entry;
                 while ((entry = zis.getNextEntry()) != null) {
-                    String entryName = entry.getName();
-
-                    if (entryName.endsWith(".pdf")) {
+                    if (entry.getName().endsWith(".pdf")) {
                         PDF pdf = new PDF(zis);
                         assertTrue(pdf.text.contains("Sample PDF Content"));
+                        return;
+                    }
+                }
+            }
+        }
+    }
 
-                    } else if (entryName.endsWith(".xlsx")) {
+    @Test
+    void parseExcelFromZipTest() throws Exception {
+        try (InputStream is = cl.getResourceAsStream("test_files.zip")) {
+            assert is != null;
+            try (ZipInputStream zis = new ZipInputStream(is)) {
+
+                ZipEntry entry;
+                while ((entry = zis.getNextEntry()) != null) {
+                    if (entry.getName().endsWith(".xlsx")) {
                         byte[] excelData = zis.readAllBytes();
                         XLS xls = new XLS(excelData);
                         assertEquals("Sample Excel Data",
                                 xls.excel.getSheetAt(0).getRow(0).getCell(0).getStringCellValue());
+                        return;
+                    }
+                }
+            }
+        }
+    }
 
-                    } else if (entryName.endsWith(".csv")) {
+    @Test
+    void parseCsvFromZipTest() throws Exception {
+        try (InputStream is = cl.getResourceAsStream("test_files.zip")) {
+            assert is != null;
+            try (ZipInputStream zis = new ZipInputStream(is)) {
+
+                ZipEntry entry;
+                while ((entry = zis.getNextEntry()) != null) {
+                    if (entry.getName().endsWith(".csv")) {
                         CSVReader csvReader = new CSVReader(new InputStreamReader(zis, StandardCharsets.UTF_8));
                         List<String[]> csvData = csvReader.readAll();
 
@@ -54,6 +80,7 @@ public class ZipFilesParsingTest {
                         assertEquals("2", csvData.get(2)[0]);
                         assertEquals("Петр Петров", csvData.get(2)[1]);
                         assertEquals("peter@example.com", csvData.get(2)[2]);
+                        return;
                     }
                 }
             }
