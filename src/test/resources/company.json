@@ -1,0 +1,22 @@
+{
+  "company": "Tech Innovations",
+  "employees": [
+    {
+      "id": 101,
+      "name": "Иван Иванов",
+      "position": "Разработчик",
+      "skills": ["Java", "Spring", "SQL"],
+      "active": true,
+      "hire_date": "2021-05-15"
+    },
+    {
+      "id": 102,
+      "name": "Петр Петров",
+      "position": "Тестировщик",
+      "skills": ["Selenium", "JUnit", "Python"],
+      "active": true,
+      "hire_date": "2022-03-10"
+    }
+  ],
+  "departments": ["IT", "HR", "Finance"]
+}
